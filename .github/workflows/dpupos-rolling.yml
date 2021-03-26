@@ -82,13 +82,6 @@ jobs:
         sudo mv petbuild-sources ../woof-out_x86_64_x86_64_debian_dpupos/
         cd ../woof-out_x86_64_x86_64_debian_dpupos
         sudo -E HOME=/root DISTRO_EXTRAVERSION=rolling${{ github.run_number }} ./3builddistro release
-    - name: Delete old releases
-      uses: dev-drprasad/delete-older-releases@v0.2.0
-      with:
-        keep_latest: 2
-        delete_tag_pattern: dpupos-${{ github.job }}-1-rolling
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -109,8 +102,19 @@ jobs:
         asset_path: ../woof-out_x86_64_x86_64_debian_dpupos/woof-output-dpupos-1/dpupos-1.tar
         asset_name: dpupos-1.tar
         asset_content_type: application/octet-stream
+    - name: Compress image
+      run: sudo gzip -1 ../woof-out_x86_64_x86_64_debian_dpupos/woof-output-dpupos-1/dpupos-1-ext4-2gb.img
     - name: Compress legacy image
       run: sudo gzip -1 ../woof-out_x86_64_x86_64_debian_dpupos/woof-output-dpupos-1/dpupos-1-ext4-2gb-legacy.img
+    - name: Upload image
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ../woof-out_x86_64_x86_64_debian_dpupos/woof-output-dpupos-1/dpupos-1-ext4-2gb.img.gz
+        asset_name: dpupos-1-ext4-2gb.img.gz
+        asset_content_type: application/octet-stream
     - name: Upload legacy image
       uses: actions/upload-release-asset@v1
       env:
@@ -129,6 +133,13 @@ jobs:
         asset_path: ../woof-out_x86_64_x86_64_debian_dpupos/kernel-kit/output/kernel_sources-5.4-dpupos.sfs
         asset_name: kernel_sources-5.4-dpupos.sfs
         asset_content_type: application/octet-stream
+    - name: Delete old releases
+      uses: dev-drprasad/delete-older-releases@v0.2.0
+      with:
+        keep_latest: 2
+        delete_tag_pattern: dpupos-${{ github.job }}-1-rolling
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
       run: |
         sudo mv ../woof-out_x86_64_x86_64_debian_dpupos/petbuild-sources .
@@ -203,13 +214,6 @@ jobs:
         sudo mv petbuild-sources ../woof-out_x86_64_arm_debian_dpupos-c201/
         cd ../woof-out_x86_64_arm_debian_dpupos-c201/
         sudo -E HOME=/root DISTRO_EXTRAVERSION=rolling${{ github.run_number }} ./3builddistro release
-    - name: Delete old releases
-      uses: dev-drprasad/delete-older-releases@v0.2.0
-      with:
-        keep_latest: 2
-        delete_tag_pattern: dpupos-${{ github.job }}-1-rolling
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -241,6 +245,13 @@ jobs:
         asset_path: ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-1/dpupos-1-ext4-2gb.img.gz
         asset_name: dpupos-1-ext4-2gb.img.gz
         asset_content_type: application/octet-stream
+    - name: Delete old releases
+      uses: dev-drprasad/delete-older-releases@v0.2.0
+      with:
+        keep_latest: 2
+        delete_tag_pattern: dpupos-${{ github.job }}-1-rolling
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
       run: |
         sudo mv ../woof-out_x86_64_arm_debian_dpupos-c201/petbuild-sources .
