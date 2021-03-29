@@ -81,7 +81,7 @@ jobs:
       run: |
         sudo mv petbuild-sources ../woof-out_x86_64_x86_64_debian_dpupos/
         cd ../woof-out_x86_64_x86_64_debian_dpupos
-        sudo -E HOME=/root DISTRO_EXTRAVERSION=rolling${{ github.run_number }} ./3builddistro release
+        sudo -E HOME=/root DISTRO_EXTRAVERSION=-rolling${{ github.run_number }} ./3builddistro release
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -213,7 +213,7 @@ jobs:
       run: |
         sudo mv petbuild-sources ../woof-out_x86_64_arm_debian_dpupos-c201/
         cd ../woof-out_x86_64_arm_debian_dpupos-c201/
-        sudo -E HOME=/root DISTRO_EXTRAVERSION=rolling${{ github.run_number }} ./3builddistro release
+        sudo -E HOME=/root DISTRO_EXTRAVERSION=-rolling${{ github.run_number }} ./3builddistro release
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -325,7 +325,7 @@ jobs:
       run: |
         sudo mv petbuild-sources ../woof-out_x86_x86_debian_dpupos/
         cd ../woof-out_x86_x86_debian_dpupos
-        sudo -E HOME=/root DISTRO_EXTRAVERSION=rolling${{ github.run_number }} linux32 ./3builddistro release
+        sudo -E HOME=/root DISTRO_EXTRAVERSION=-rolling${{ github.run_number }} linux32 ./3builddistro release
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
