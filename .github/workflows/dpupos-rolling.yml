@@ -284,7 +284,7 @@ jobs:
       run: sudo chown -R root:root local-repositories
     - name: merge2out
       run: |
-        (echo 2; echo 1; echo 3; echo) | sudo -E ./merge2out
+        (echo 2; echo 1; echo 3; echo) | sudo -E linux32 ./merge2out
     - name: Set version
       run: sudo sed s/^DISTRO_VERSION=.*/DISTRO_VERSION=1/ -i ../woof-out_x86_x86_debian_dpupos/DISTRO_SPECS
     - name: Enable updates
