@@ -39,8 +39,7 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: |
-        (echo 3; echo 1; echo 3; echo) | sudo -E ./merge2out
+      run: yes "" | sudo -E ./merge2out woof-distro/x86_64/debian/dpupos
     - name: Set version
       run: sudo sed s/^DISTRO_VERSION=.*/DISTRO_VERSION=1/ -i ../woof-out_x86_64_x86_64_debian_dpupos/DISTRO_SPECS
     - name: Enable updates
@@ -53,19 +52,21 @@ jobs:
       run: |
         cd ../woof-out_x86_64_x86_64_debian_dpupos
         sudo -E ./1download
-    - name: Install kernel-kit dependencies
-      run: |
-        sudo apt-get install -y --no-install-recommends ccache libelf-dev libssl-dev
-        ccache --set-config=hash_dir=false --set-config=max_size=2.0G
-    - name: kernel-kit
-      run: |
-        cd ../woof-out_x86_64_x86_64_debian_dpupos/kernel-kit
-        sed 's/^package_name_suffix=.*/package_name_suffix=dpupos/' 5.4.x-x86_64-build.conf | sudo tee build.conf
-        sudo -E ./build.sh
     - name: 2createpackages
       run: |
         cd ../woof-out_x86_64_x86_64_debian_dpupos
         echo | sudo -E ./2createpackages
+    - name: Get cached kernel-kit output
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        repo: puppylinux-woof-CE/woof-CE
+        branch: testing
+        workflow: kernel-kit.yml
+        workflow_conclusion: success
+        name: kernel-kit-output-5.4.x-x86_64
+        path: kernel-kit-output
+    - name: Move cached kernel-kit output
+      run: sudo mv kernel-kit-output ../woof-out_x86_64_x86_64_debian_dpupos/kernel-kit/output
     - name: Get cached petbuild-sources
       uses: actions/cache@v2
       with:
@@ -130,8 +131,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../woof-out_x86_64_x86_64_debian_dpupos/kernel-kit/output/kernel_sources-5.4-dpupos.sfs
-        asset_name: kernel_sources-5.4-dpupos.sfs
+        asset_path: ../woof-out_x86_64_x86_64_debian_dpupos/kernel-kit/output/kernel_sources-5.4-kernel-kit.sfs
+        asset_name: kernel_sources-5.4-kernel-kit.sfs
         asset_content_type: application/octet-stream
     - name: Delete old releases
       uses: dev-drprasad/delete-older-releases@v0.2.0
@@ -141,8 +142,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
-      run: |
-        sudo mv ../woof-out_x86_64_x86_64_debian_dpupos/petbuild-sources .
+      run: sudo mv ../woof-out_x86_64_x86_64_debian_dpupos/petbuild-sources .
   arm-c201:
     runs-on: ubuntu-20.04
     steps:
@@ -171,8 +171,7 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: |
-        (echo 1; echo 1; echo; echo) | sudo -E ./merge2out
+      run: yes "" | sudo -E ./merge2out woof-distro/arm/debian/dpupos-c201
     - name: Set version
       run: sudo sed s/^DISTRO_VERSION=.*/DISTRO_VERSION=1/ -i ../woof-out_x86_64_arm_debian_dpupos-c201/DISTRO_SPECS
     - name: Enable updates
@@ -253,8 +252,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
-      run: |
-        sudo mv ../woof-out_x86_64_arm_debian_dpupos-c201/petbuild-sources .
+      run: sudo mv ../woof-out_x86_64_arm_debian_dpupos-c201/petbuild-sources .
   x86:
     runs-on: ubuntu-20.04
     steps:
@@ -283,8 +281,7 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: |
-        (echo 2; echo 1; echo 3; echo) | sudo -E linux32 ./merge2out
+      run: yes "" | sudo -E linux32 ./merge2out woof-distro/x86/debian/dpupos
     - name: Set version
       run: sudo sed s/^DISTRO_VERSION=.*/DISTRO_VERSION=1/ -i ../woof-out_x86_x86_debian_dpupos/DISTRO_SPECS
     - name: Enable updates
@@ -297,19 +294,21 @@ jobs:
       run: |
         cd ../woof-out_x86_x86_debian_dpupos
         sudo -E linux32 ./1download
-    - name: Install kernel-kit dependencies
-      run: |
-        sudo apt-get install -y --no-install-recommends ccache libelf-dev libssl-dev
-        ccache --set-config=hash_dir=false --set-config=max_size=2.0G
-    - name: kernel-kit
-      run: |
-        cd ../woof-out_x86_x86_debian_dpupos/kernel-kit
-        sed 's/^package_name_suffix=.*/package_name_suffix=dpupos/' 4.19.x-x86-build.conf | sudo tee build.conf
-        sudo -E ./build.sh
     - name: 2createpackages
       run: |
         cd ../woof-out_x86_x86_debian_dpupos
         echo | sudo -E linux32 ./2createpackages
+    - name: Get cached kernel-kit output
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        repo: puppylinux-woof-CE/woof-CE
+        branch: testing
+        workflow: kernel-kit.yml
+        workflow_conclusion: success
+        name: kernel-kit-output-4.19.x-x86
+        path: kernel-kit-output
+    - name: Move cached kernel-kit output
+      run: sudo mv kernel-kit-output ../woof-out_x86_x86_debian_dpupos/kernel-kit/output
     - name: Get cached petbuild-sources
       uses: actions/cache@v2
       with:
@@ -374,8 +373,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../woof-out_x86_x86_debian_dpupos/kernel-kit/output/kernel_sources-4.19-dpupos.sfs
-        asset_name: kernel_sources-4.19-dpupos.sfs
+        asset_path: ../woof-out_x86_x86_debian_dpupos/kernel-kit/output/kernel_sources-4.19-kernel-kit.sfs
+        asset_name: kernel_sources-4.19-kernel-kit.sfs
         asset_content_type: application/octet-stream
     - name: Delete old releases
       uses: dev-drprasad/delete-older-releases@v0.2.0
@@ -385,5 +384,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
-      run: |
-        sudo mv ../woof-out_x86_x86_debian_dpupos/petbuild-sources .
+      run: sudo mv ../woof-out_x86_x86_debian_dpupos/petbuild-sources .
