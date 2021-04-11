@@ -184,19 +184,21 @@ jobs:
       run: |
         cd ../woof-out_x86_64_arm_debian_dpupos-c201/
         sudo -E ./1download
-    - name: Install kernel-kit dependencies
-      run: |
-        sudo apt-get install -y --no-install-recommends ccache libelf-dev libssl-dev gcc-arm-linux-gnueabihf
-        ccache --set-config=hash_dir=false --set-config=max_size=2.0G
-    - name: kernel-kit
-      run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/kernel-kit
-        sed 's/^package_name_suffix=.*/package_name_suffix=dpupos/' 5.4.x-arm-c201-build.conf | sudo tee build.conf
-        sudo -E ./build.sh
     - name: 2createpackages
       run: |
         cd ../woof-out_x86_64_arm_debian_dpupos-c201/
         echo | sudo -E ./2createpackages
+    - name: Get cached kernel-kit output
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        repo: puppylinux-woof-CE/woof-CE
+        branch: testing
+        workflow: kernel-kit.yml
+        workflow_conclusion: success
+        name: kernel-kit-output-5.4.x-veyron-speedy
+        path: kernel-kit-output
+    - name: Move cached kernel-kit output
+      run: sudo mv kernel-kit-output ../woof-out_x86_64_arm_debian_dpupos-c201/kernel-kit/output
     - name: Get cached petbuild-sources
       uses: actions/cache@v2
       with:
