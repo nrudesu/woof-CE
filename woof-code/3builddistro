@@ -51,6 +51,7 @@ if [ "$BUILD_ZIP" = "yes" ]; then
 	SDFLAG="zip"
 elif [ "$BUILD_CROS_IMAGE" = "yes" ]; then
 	CROSFLAG=1
+	BUILD_NLSX=yes
 elif [ "$DISTRO_TARGETARCH" = "arm" ]; then
 	SDFLAG=1
 fi
