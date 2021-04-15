@@ -875,8 +875,6 @@ echo
 
 if [ "$SDFLAG" != "" -a "$SDFLAG" != "zip" ]; then
 	BUILD_SFS='no'
-elif [ "$CROSFLAG" != "" ]; then
-	BUILD_SFS='no'
 else
 	BUILD_SFS='yes'
 fi
