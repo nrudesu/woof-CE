@@ -16,7 +16,7 @@ echo "console=tty1 root=PARTUUID=%U/PARTNROFF=1 init=/init rootfstype=ext4 rootw
 vmlinuz=build/vmlinuz
 if [ "$WOOF_TARGETARCH" = "arm" ]; then
     case "$BOOT_BOARD" in
-    c201)
+    veyron-speedy)
         cat << EOF > kernel.its
 /dts-v1/;
 
@@ -67,6 +67,8 @@ EOF
     esac
 fi
 
+set -e
+
 dd if=/dev/zero of=bootloader.bin bs=512 count=1
 vbutil_kernel --pack build/vmlinux.kpart \
               --version 1 \
@@ -89,8 +91,8 @@ create_image() {
 	end=`cgpt show $1 | grep 'Sec GPT table' | awk '{print $1}'`
 	size=$(($end - $start))
 	cgpt add -i 2 -t data -b $start -s $size -l Root $1
-	# $size is in 512 byte blocks while ext4 uses a block size of 1024 bytes
-	mkfs.ext4 -F -b 1024 -m 0 -O ^has_journal -E offset=$(($start * 512)) $1 $(($size / 2))
+	# $size is in 512 byte blocks while encrypted ext4 uses a block size of 4096 bytes
+	mkfs.ext4 -F -b 4096 -m 0 -O ^has_journal,encrypt -E offset=$(($start * 512)) $1 $(($size / 8))
 }
 
 create_image ${SD_IMG_BASE} 50M 40
@@ -114,7 +116,6 @@ for SFS in build/*.sfs ../${WOOF_OUTPUT}/*.sfs; do
 	BASE=${SFS##*/}
 	ln -s ${VERSIONDIR}/${BASE} /mnt/ssdimagep2/${BASE}
 done
-mkdir -p ../../local-repositories/frugalify
 case $WOOF_TARGETARCH in
 x86*) FRUGALIFY=frugalify-overlayfs-i386 ;;
 arm|aarch64) FRUGALIFY=frugalify-overlayfs-arm ;;
@@ -131,7 +132,7 @@ x86*)
 	parted --script ${LEGACY_IMG_BASE} set 1 boot on
 	LOOP=`losetup -Pf --show ${LEGACY_IMG_BASE}`
 	PARTUUID=`blkid -s PARTUUID -o value ${LOOP}p1`
-	mkfs.ext4 -F -b 1024 -m 0 -O ^has_journal ${LOOP}p1
+	mkfs.ext4 -F -b 4096 -m 0 -O ^has_journal,encrypt ${LOOP}p1
 
 	mkdir -p /mnt/legacyimagep1
 	mount-FULL -o noatime ${LOOP}p1 /mnt/legacyimagep1
@@ -177,3 +178,5 @@ cp -f --sparse=always ${SSD_IMG_BASE} /mnt/sdimagep2/
 busybox umount /mnt/sdimagep2 2>/dev/null
 
 mv -f ${SD_IMG_BASE} ../${WOOF_OUTPUT}/${INSTALL_IMG_BASE}
+
+set +e

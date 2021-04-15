@@ -143,7 +143,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
       run: sudo mv ../woof-out_x86_64_x86_64_debian_dpupos/petbuild-sources .
-  arm-c201:
+  veyron-speedy:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout code
@@ -171,22 +171,22 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: yes "" | sudo -E ./merge2out woof-distro/arm/debian/dpupos-c201
+      run: yes "" | sudo -E ./merge2out woof-distro/arm/debian/dpupos-veyron-speedy
     - name: Set version
-      run: sudo sed s/^DISTRO_VERSION=.*/DISTRO_VERSION=1/ -i ../woof-out_x86_64_arm_debian_dpupos-c201/DISTRO_SPECS
+      run: sudo sed s/^DISTRO_VERSION=.*/DISTRO_VERSION=1/ -i ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/DISTRO_SPECS
     - name: Enable updates
-      run: sudo sed 's/RELEASE_CHANNEL=.*/RELEASE_CHANNEL=beta/' -i ../woof-out_x86_64_arm_debian_dpupos-c201/rootfs-packages/pm6_updater/etc/pm6_updater.conf 
+      run: sudo sed 's/RELEASE_CHANNEL=.*/RELEASE_CHANNEL=beta/' -i ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/rootfs-packages/pm6_updater/etc/pm6_updater.conf 
     - name: 0setup
       run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         sudo -E ./0setup
     - name: 1download
       run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         sudo -E ./1download
     - name: 2createpackages
       run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         echo | sudo -E ./2createpackages
     - name: Get cached kernel-kit output
       uses: dawidd6/action-download-artifact@v2
@@ -198,7 +198,7 @@ jobs:
         name: kernel-kit-output-5.4.x-veyron-speedy
         path: kernel-kit-output
     - name: Move cached kernel-kit output
-      run: sudo mv kernel-kit-output ../woof-out_x86_64_arm_debian_dpupos-c201/kernel-kit/output
+      run: sudo mv kernel-kit-output ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/kernel-kit/output
     - name: Get cached petbuild-sources
       uses: actions/cache@v2
       with:
@@ -212,8 +212,8 @@ jobs:
         sudo ln -s /usr/bin/mount /usr/local/bin/mount-FULL
     - name: 3builddistro
       run: |
-        sudo mv petbuild-sources ../woof-out_x86_64_arm_debian_dpupos-c201/
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        sudo mv petbuild-sources ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         sudo -E HOME=/root DISTRO_EXTRAVERSION=-rolling${{ github.run_number }} ./3builddistro release
     - name: Create release
       id: create_release
@@ -232,18 +232,18 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-1/dpupos-1.tar
+        asset_path: ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/woof-output-dpupos-1/dpupos-1.tar
         asset_name: dpupos-1.tar
         asset_content_type: application/octet-stream
     - name: Compress image
-      run: sudo gzip -1 ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-1/dpupos-1-ext4-2gb.img
+      run: sudo gzip -1 ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/woof-output-dpupos-1/dpupos-1-ext4-2gb.img
     - name: Upload image
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-1/dpupos-1-ext4-2gb.img.gz
+        asset_path: ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/woof-output-dpupos-1/dpupos-1-ext4-2gb.img.gz
         asset_name: dpupos-1-ext4-2gb.img.gz
         asset_content_type: application/octet-stream
     - name: Delete old releases
@@ -254,7 +254,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Move cached directories
-      run: sudo mv ../woof-out_x86_64_arm_debian_dpupos-c201/petbuild-sources .
+      run: sudo mv ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/petbuild-sources .
   x86:
     runs-on: ubuntu-20.04
     steps:

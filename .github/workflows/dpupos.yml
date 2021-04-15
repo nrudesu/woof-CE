@@ -3,7 +3,7 @@ name: dpupos
 on:
   push:
     branches:
-      - c201-v2
+      - dpupos
       - testing
     paths:
       - 'woof-distro/x86_64/debian/dpupos/**'
@@ -22,7 +22,7 @@ on:
     branches:
       - ci
       - testing
-      - c201-v2
+      - dpupos
     inputs:
       version:
         description: 'Version number'
@@ -174,7 +174,7 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Move cached directories
       run: sudo mv ../woof-out_x86_64_x86_64_debian_dpupos/petbuild-{sources,cache,output} .
-  arm-c201:
+  veyron-speedy:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout code
@@ -206,23 +206,23 @@ jobs:
         (echo 1; echo 1; echo; echo) | sudo -E ./merge2out
     - name: Set version
       if: github.event_name == 'workflow_dispatch'
-      run: sudo sed -i s/^DISTRO_VERSION=.*/DISTRO_VERSION=${{ github.event.inputs.version }}/ ../woof-out_x86_64_arm_debian_dpupos-c201/DISTRO_SPECS
+      run: sudo sed -i s/^DISTRO_VERSION=.*/DISTRO_VERSION=${{ github.event.inputs.version }}/ ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/DISTRO_SPECS
     - name: Set compression algorithm
       if: github.event_name != 'workflow_dispatch'
       run: |
-        echo | sudo tee -a ../woof-out_x86_64_arm_debian_dpupos-c201/_00build.conf
-        echo 'SFSCOMP="-comp lzo -Xalgorithm lzo1x_1"' | sudo tee -a ../woof-out_x86_64_arm_debian_dpupos-c201/_00build.conf
+        echo | sudo tee -a ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/_00build.conf
+        echo 'SFSCOMP="-comp lzo -Xalgorithm lzo1x_1"' | sudo tee -a ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/_00build.conf
     - name: 0setup
       run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         sudo -E ./0setup
     - name: 1download
       run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         sudo -E ./1download
     - name: 2createpackages
       run: |
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         echo | sudo -E ./2createpackages
     - name: Get cached kernel-kit output
       uses: dawidd6/action-download-artifact@v2
@@ -234,7 +234,7 @@ jobs:
         name: kernel-kit-output-5.4.x-veyron-speedy
         path: kernel-kit-output
     - name: Move cached kernel-kit output
-      run: sudo mv kernel-kit-output ../woof-out_x86_64_arm_debian_dpupos-c201/kernel-kit/output
+      run: sudo mv kernel-kit-output ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/kernel-kit/output
     - name: Get cached petbuild-sources
       uses: actions/cache@v2
       with:
@@ -265,8 +265,8 @@ jobs:
     - name: 3builddistro
       run: |
         sudo chown -R root:root petbuild-output
-        sudo mv petbuild-{sources,cache,output} ../woof-out_x86_64_arm_debian_dpupos-c201/
-        cd ../woof-out_x86_64_arm_debian_dpupos-c201/
+        sudo mv petbuild-{sources,cache,output} ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
+        cd ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/
         sudo -E HOME=/root DISTRO_EXTRAVERSION=${{ github.event.inputs.suffix }} ./3builddistro release
     - name: Create release
       if: github.event_name == 'workflow_dispatch'
@@ -286,12 +286,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-${{ github.event.inputs.version }}/dpupos-${{ github.event.inputs.version }}.tar
+        asset_path: ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/woof-output-dpupos-${{ github.event.inputs.version }}/dpupos-${{ github.event.inputs.version }}.tar
         asset_name: dpupos-${{ github.event.inputs.version }}.tar
         asset_content_type: application/octet-stream
     - name: Compress image
       if: github.event_name == 'workflow_dispatch'
-      run: sudo gzip -1 ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-${{ github.event.inputs.version }}/dpupos-${{ github.event.inputs.version }}-ext4-2gb.img
+      run: sudo gzip -1 ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/woof-output-dpupos-${{ github.event.inputs.version }}/dpupos-${{ github.event.inputs.version }}-ext4-2gb.img
     - name: Upload image
       if: github.event_name == 'workflow_dispatch'
       uses: actions/upload-release-asset@v1
@@ -299,13 +299,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../woof-out_x86_64_arm_debian_dpupos-c201/woof-output-dpupos-${{ github.event.inputs.version }}/dpupos-${{ github.event.inputs.version }}-ext4-2gb.img.gz
+        asset_path: ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/woof-output-dpupos-${{ github.event.inputs.version }}/dpupos-${{ github.event.inputs.version }}-ext4-2gb.img.gz
         asset_name: dpupos-${{ github.event.inputs.version }}-ext4-2gb.img.gz
         asset_content_type: application/octet-stream
     - name: Move cached directories
       run: |
-        sudo mv ../woof-out_x86_64_arm_debian_dpupos-c201/petbuild-{sources,cache,output} .
-        sudo mv ../woof-out_x86_64_arm_debian_dpupos-c201/kernel-kit/output kernel-kit-output
+        sudo mv ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/petbuild-{sources,cache,output} .
+        sudo mv ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/kernel-kit/output kernel-kit-output
   x86:
     runs-on: ubuntu-20.04
     steps:
