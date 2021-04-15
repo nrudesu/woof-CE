@@ -62,8 +62,7 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: |
-        (echo 3; echo 1; echo 3; echo) | sudo -E ./merge2out
+      run: yes "" | sudo -E ./merge2out woof-distro/x86_64/debian/dpupos
     - name: Set version
       if: github.event_name == 'workflow_dispatch'
       run: sudo sed -i s/^DISTRO_VERSION=.*/DISTRO_VERSION=${{ github.event.inputs.version }}/ ../woof-out_x86_64_x86_64_debian_dpupos/DISTRO_SPECS
@@ -202,8 +201,7 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: |
-        (echo 1; echo 1; echo; echo) | sudo -E ./merge2out
+      run: yes "" | sudo -E ./merge2out woof-distro/arm/debian/dpupos-veyron-speedy
     - name: Set version
       if: github.event_name == 'workflow_dispatch'
       run: sudo sed -i s/^DISTRO_VERSION=.*/DISTRO_VERSION=${{ github.event.inputs.version }}/ ../woof-out_x86_64_arm_debian_dpupos-veyron-speedy/DISTRO_SPECS
@@ -334,8 +332,7 @@ jobs:
     - name: Fix cache ownership
       run: sudo chown -R root:root local-repositories
     - name: merge2out
-      run: |
-        (echo 2; echo 1; echo 3; echo) | sudo -E linux32 ./merge2out
+      run: yes "" | sudo -E linux32 ./merge2out woof-distro/x86/debian/dpupos
     - name: Set version
       if: github.event_name == 'workflow_dispatch'
       run: sudo sed -i s/^DISTRO_VERSION=.*/DISTRO_VERSION=${{ github.event.inputs.version }}/ ../woof-out_x86_x86_debian_dpupos/DISTRO_SPECS
