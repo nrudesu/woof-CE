@@ -82,6 +82,8 @@ jobs:
         curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/expolit.pet/download -o expolit.pet
         curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/json-five.pet/download -o json-five.pet
         curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/spflash.pet/download -o spflash.pet
+        cd ../packages-deb-focal
+        curl -L http://security.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb -o libpng12.deb
     - name: add package to database (root)
       run : |
          cd ../woof-out_*
@@ -89,6 +91,7 @@ jobs:
          sudo -E linuxn su -c 'echo ":json-five:|pet|Packages-puppy-bionic64-official|json-five-1.1|json-five|1.1||Fun|56K||json-five.pet||Expolit||||" >> status/findpkgs_FINAL_*'
          sudo -E linuxn su -c 'echo ":bypass:|pet|Packages-puppy-bionic64-official|bypass-1.1|bypass|1.1||Fun|56K||bypass.pet||Expolit||||" >> status/findpkgs_FINAL_*'
          sudo -E linuxn su -c 'echo ":expolit:|pet|Packages-puppy-bionic64-official|expolit-1.1|expolit|1.1||Fun|56K||expolit.pet||Expolit||||" >> status/findpkgs_FINAL*'
+         sudo -E linuxn su -c 'echo ":libpng12:|common|Packages-puppy-bionic64-official|libpng-12|libpng12|1.1||Fun|56K||libpng12.deb||Expolit||||" >> status/findpkgs_FINAL*'
     - name: 2createpackages
       run: |
         cd ../woof-out_*
