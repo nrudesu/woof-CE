@@ -75,13 +75,13 @@ jobs:
       run: |
         cd ../woof-out_*
         sudo -E linuxn ./1download
-    - name : download tools
+    - name : download my packages
       run: |
-        cd ../woof-out_*
-        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/bypass.pet/download -o packages_pet/bypass.pet
-        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/expolit.pet/download -o packages_pet/expolit.pet
-        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/json-five.pet/download -o packages_pet/json-five.pet
-        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/spflash.pet/download -o packages_pet/spflash.pet
+        cd ../local-repositories/x86_64/packages-pet
+        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/bypass.pet/download -o bypass.pet
+        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/expolit.pet/download -o expolit.pet
+        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/json-five.pet/download -o json-five.pet
+        curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/spflash.pet/download -o spflash.pet
     - name: add package to database
       run : |
           cd ../woof-out_*
