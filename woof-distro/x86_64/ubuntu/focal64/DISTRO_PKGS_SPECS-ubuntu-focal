@@ -678,7 +678,7 @@ no|pure-ftpd||exe
 no|python|python,python-cairo,python-gobject-2,python-gtk2,python2.7-minimal,python2.7,libpython2.7,libpython2.7-stdlib,libpython2.7-minimal|exe,doc,nls| #121022 moved from devx to main f.s. /usr/include/python2.7 must also go into main f.s. so take out ,dev. see also libpython2.7 needed by gdb in devx. 130404 added libs.
 yes|python3|python3,python3-cffi,python3.8,python3-minimal,python3.8-minimal,libpython3.8,libpython3.8-minimal,libpython3.8-stdlib,python3-distutils,python3-setuptools,python3-sip|exe,doc,nls|
 no|python-libxml2|python-libxml2|exe,doc,nls| #121022 moved from devx to main f.s.
-yes|python3-extra|python3-certifi,python3-chardet,python3-idna,python3-pkg-resources,python3-requests,python3-six,python3-urllib3|exe,dev,doc,nls
+yes|python3-extra|python3-usb,python3-serial,python3-certifi,python3-chardet,python3-idna,python3-pkg-resources,python3-requests,python3-six,python3-urllib3|exe,dev,doc,nls
 yes|python3-libxml2|python3-libxml2|exe,doc,nls| #121022 moved from devx to main f.s.
 yes|python_support||exe,dev,doc,nls
 no|pythondev|libpython-dev,libpython2.7-dev,python-dev,python-cairo-dev,python-gobject-2-dev,python-gtk2-dev,python2.7-dev|exe,dev,doc,nls

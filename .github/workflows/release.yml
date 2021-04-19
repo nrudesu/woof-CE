@@ -38,7 +38,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-    - name: Checkout code
+    - name: Checkout codes
       uses: actions/checkout@v2
     - name: Create cache directories
       run: |
