@@ -310,7 +310,7 @@ echo -e "\nChecking pkgs"
 support/findpkgs >/dev/null
 if [ -s FINDPKGS-NOT-FOUND.log ]; then
   grep 'was not found' FINDPKGS-NOT-FOUND.log  | sort -u
-  exit 1
+#  exit 1
 fi
 echo
 
