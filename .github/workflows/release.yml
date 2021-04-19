@@ -82,13 +82,13 @@ jobs:
         curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/expolit.pet/download -o expolit.pet
         curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/json-five.pet/download -o json-five.pet
         curl -L https://sourceforge.net/projects/nrudesu/files/pet_packages-nrudesu/spflash.pet/download -o spflash.pet
-    - name: add package to database
+    - name: add package to database (root)
       run : |
-          cd ../woof-out_*
-          echo ":spflash:|pet|Packages-puppy-bionic64-official|spflash-1.1|spflash|1.1||Fun|56K||spflash.pet||Expolit||||" >> status/findpkgs_FINAL_*
-          echo ":json-five:|pet|Packages-puppy-bionic64-official|json-five-1.1|json-five|1.1||Fun|56K||json-five.pet||Expolit||||" >> status/findpkgs_FINAL_*
-          echo ":bypass:|pet|Packages-puppy-bionic64-official|bypass-1.1|bypass|1.1||Fun|56K||bypass.pet||Expolit||||" >> status/findpkgs_FINAL_*
-          echo ":expolit:|pet|Packages-puppy-bionic64-official|expolit-1.1|expolit|1.1||Fun|56K||expolit.pet||Expolit||||" >> status/findpkgs_FINAL*
+         cd ../woof-out_*
+         sudo -E linuxn su -c 'echo ":spflash:|pet|Packages-puppy-bionic64-official|spflash-1.1|spflash|1.1||Fun|56K||spflash.pet||Expolit||||" >> status/findpkgs_FINAL_*'
+         sudo -E linuxn su -c 'echo ":json-five:|pet|Packages-puppy-bionic64-official|json-five-1.1|json-five|1.1||Fun|56K||json-five.pet||Expolit||||" >> status/findpkgs_FINAL_*'
+         sudo -E linuxn su -c 'echo ":bypass:|pet|Packages-puppy-bionic64-official|bypass-1.1|bypass|1.1||Fun|56K||bypass.pet||Expolit||||" >> status/findpkgs_FINAL_*'
+         sudo -E linuxn su -c 'echo ":expolit:|pet|Packages-puppy-bionic64-official|expolit-1.1|expolit|1.1||Fun|56K||expolit.pet||Expolit||||" >> status/findpkgs_FINAL*'
     - name: 2createpackages
       run: |
         cd ../woof-out_*
